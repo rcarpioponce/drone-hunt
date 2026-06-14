@@ -1,0 +1,175 @@
+/* ─── RESET ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ─── BODY ───────────────────────────────────────────────────────────────── */
+body {
+  background: #050a14;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  color: #00f5ff;
+}
+
+/* ─── WRAPPER ────────────────────────────────────────────────────────────── */
+#game-wrapper {
+  position: relative;
+  width: 1280px;
+  height: 720px;
+  box-shadow: 0 0 60px rgba(0,245,255,0.25), 0 0 120px rgba(255,0,200,0.1);
+  border: 1px solid rgba(0,245,255,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* ─── CANVAS ─────────────────────────────────────────────────────────────── */
+#game-canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: block;
+  image-rendering: crisp-edges;
+}
+
+/* ─── HIDDEN VIDEO (webcam feed) ─────────────────────────────────────────── */
+#webcam {
+  position: absolute;
+  top: -9999px; left: -9999px;
+  width: 640px; height: 360px;
+}
+
+/* ─── WEBCAM PREVIEW (corner) ────────────────────────────────────────────── */
+#cam-preview {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 180px;
+  height: 102px;
+  border: 1px solid rgba(0,245,255,0.4);
+  border-radius: 4px;
+  overflow: hidden;
+  opacity: 0.75;
+  box-shadow: 0 0 12px rgba(0,245,255,0.3);
+  pointer-events: none;
+  transform: scaleX(-1);   /* mirror */
+}
+#cam-preview video {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+/* ─── SCANLINES overlay ──────────────────────────────────────────────────── */
+#game-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ─── VIGNETTE ───────────────────────────────────────────────────────────── */
+#game-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center,
+    transparent 55%,
+    rgba(0,0,0,0.65) 100%
+  );
+  pointer-events: none;
+  z-index: 9;
+}
+
+/* ─── LOADING SCREEN ─────────────────────────────────────────────────────── */
+#loading-screen {
+  position: absolute;
+  inset: 0;
+  background: #050a14;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  gap: 24px;
+  transition: opacity 0.5s;
+}
+#loading-screen.hidden { opacity: 0; pointer-events: none; }
+
+#loading-screen h1 {
+  font-size: 3rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #00f5ff;
+  text-shadow: 0 0 20px #00f5ff, 0 0 40px rgba(0,245,255,0.5);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+#loading-screen p {
+  font-size: 0.9rem;
+  color: rgba(0,245,255,0.6);
+  letter-spacing: 0.15em;
+}
+
+.loader-bar {
+  width: 280px;
+  height: 3px;
+  background: rgba(0,245,255,0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.loader-bar-inner {
+  height: 100%;
+  background: linear-gradient(90deg, #00f5ff, #ff00c8);
+  width: 0%;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 8px #00f5ff;
+}
+
+/* ─── ANIMATIONS ─────────────────────────────────────────────────────────── */
+@keyframes pulse-glow {
+  0%, 100% { text-shadow: 0 0 20px #00f5ff, 0 0 40px rgba(0,245,255,0.5); }
+  50%       { text-shadow: 0 0 30px #00f5ff, 0 0 70px rgba(0,245,255,0.8), 0 0 100px rgba(0,245,255,0.3); }
+}
+
+/* ─── HAND STATUS BADGE ──────────────────────────────────────────────────── */
+#hand-status {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  padding: 4px 10px;
+  border-radius: 2px;
+  z-index: 11;
+  pointer-events: none;
+  transition: all 0.2s;
+}
+#hand-status.detected {
+  background: rgba(0,255,135,0.12);
+  color: #00ff87;
+  border: 1px solid rgba(0,255,135,0.4);
+}
+#hand-status.missing {
+  background: rgba(255,106,0,0.15);
+  color: #ff6a00;
+  border: 1px solid rgba(255,106,0,0.4);
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0.3; } }
+
+/* ─── RESPONSIVE SCALE ───────────────────────────────────────────────────── */
+@media (max-width: 1300px) {
+  #game-wrapper {
+    width: 100vw;
+    height: 56.25vw;
+  }
+}

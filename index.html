@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DRONE HUNT</title>
+
+  <!-- Fuente monoespaciada futurista (Google Fonts CDN) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <div id="game-wrapper">
+
+    <!-- Webcam feed (oculto, usado por MediaPipe) -->
+    <video id="webcam" playsinline autoplay muted></video>
+
+    <!-- Canvas principal -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Preview de cámara (esquina inferior derecha) -->
+    <div id="cam-preview">
+      <video playsinline autoplay muted></video>
+    </div>
+
+    <!-- Indicador de mano -->
+    <div id="hand-status" class="missing">○ MANO NO DETECTADA</div>
+
+    <!-- Pantalla de carga -->
+    <div id="loading-screen">
+      <h1>DRONE&nbsp;HUNT</h1>
+      <div class="loader-bar">
+        <div class="loader-bar-inner" id="loader-bar"></div>
+      </div>
+      <p>Iniciando…</p>
+    </div>
+
+  </div>
+
+  <!-- Módulo principal (importa MediaPipe desde CDN vía ES module) -->
+  <script type="module" src="js/main.js"></script>
+
+</body>
+</html>
